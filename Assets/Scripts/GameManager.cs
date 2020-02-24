@@ -5,8 +5,7 @@ using UnityEngine.Networking;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject cube;
-    public GameObject sphere;
+    public GameObject currentObject;
 
     public class MyObjetcs 
     {
@@ -22,15 +21,9 @@ public class GameManager : MonoBehaviour
         StartCoroutine(GetFirestoreValues());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
     IEnumerator GetFirestoreValues() 
     {
         UnityWebRequest getFirestoreData = new UnityWebRequest("https://us-central1-techtalk-demo-6ecbb.cloudfunctions.net/readFromFirestore");
-        // UnityWebRequest getFirestoreData = new UnityWebRequest("http://localhost:5000/techtalk-demo-6ecbb/us-central1/readFromFirestore");
         getFirestoreData.downloadHandler = new DownloadHandlerBuffer();
         getFirestoreData.chunkedTransfer = false;
         yield return getFirestoreData.SendWebRequest();
@@ -42,13 +35,29 @@ public class GameManager : MonoBehaviour
             Debug.Log(getFirestoreData.error);
         } else {
             Debug.Log(firestoreData);
-
             CreateFromJSON(firestoreData);
         }
     }
 
     void CreateFromJSON(string firestoreData)
     {
-        Debug.Log(JsonUtility.FromJson<MyObjetcs>(firestoreData).donut);
+        bool cubeValue = JsonUtility.FromJson<MyObjetcs>(firestoreData).cube;
+        bool donutValue = JsonUtility.FromJson<MyObjetcs>(firestoreData).donut;
+        bool rectangleValue = JsonUtility.FromJson<MyObjetcs>(firestoreData).rectangle;
+        bool sphereValue = JsonUtility.FromJson<MyObjetcs>(firestoreData).sphere;
+
+        ShowObjects(cubeValue, "Cube");
+        ShowObjects(sphereValue, "Sphere");
+    }
+
+    void ShowObjects(bool showObject, string objectName)
+    {
+        GameObject objectResource = Resources.Load<GameObject>(objectName);
+
+        if(showObject == true) {
+            GameObject currentObject = Instantiate(objectResource);
+        } else {
+            Destroy(currentObject);
+        }
     }
 }
