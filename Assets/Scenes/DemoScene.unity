@@ -323,8 +323,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad32962cd4c0b427f98d1d1513909104, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cube: {fileID: 0}
-  sphere: {fileID: 0}
+  currentObject: {fileID: 0}
 --- !u!4 &2012391135
 Transform:
   m_ObjectHideFlags: 0
